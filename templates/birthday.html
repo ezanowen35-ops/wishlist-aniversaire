@@ -1,15 +1,11 @@
 <!DOCTYPE html>
-
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Ma Wishlist Anniversaire</title>
-
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
-
 <style>
-
 *{
   margin:0;
   padding:0;
@@ -631,246 +627,264 @@ header p{
     transform:none
   }
 }
-
 </style>
+<base target="_blank">
 </head>
 
 <body>
 
-<!-- LOGIN -->
-
+<!-- LOGIN OVERLAY -->
 <div id="login-overlay">
   <div class="login-card">
-
-    <span class="lock-icon">🔒</span>
-
+    <span class="lock-icon">&#128274;</span>
     <h2>Accès Réservé</h2>
-
     <p>
       Veuillez entrer le mot de passe magique
       pour découvrir votre wishlist.
     </p>
-
     <div class="input-group">
-
       <input
         type="password"
         id="pass-input"
         placeholder="Mot de passe..."
         onkeypress="if(event.key==='Enter') checkPass()"
       >
-
       <button onclick="checkPass()">
-        Entrer ✨
+        Entrer &#10024;
       </button>
-
     </div>
-
     <p id="err-msg">
       Mot de passe incorrect, réessaie !
     </p>
-
   </div>
 </div>
 
-<!-- CONTENU -->
-
+<!-- MAIN CONTENT (caché au départ) -->
 <div id="main-content" style="display:none;">
 
-<div class="bell-wrap">
-  <div class="bell-btn" id="bellBtn" onclick="togglePanel()">🔔
-    <div class="badge" id="badge"></div>
-  </div>
-</div>
-
-<div class="notif-panel" id="notifPanel">
-  <h3>🎁 Notifications Cadeaux</h3>
-  <div id="notifList">
-    <div class="n-empty">
-      Aucune notification...
+  <div class="bell-wrap">
+    <div class="bell-btn" id="bellBtn" onclick="togglePanel()">&#128276;
+      <div class="badge" id="badge"></div>
     </div>
   </div>
 
-  <button class="clear-btn" onclick="markRead()">
-    ✓ Tout marquer comme lu
-  </button>
-</div>
-
-<header class="fu">
-
-  <span class="crown">👑</span>
-
-  <h1>
-    Bienvenue dans ta<br>
-    Wishlist d'Anniversaire !
-  </h1>
-
-  <p>
-    Chaque rêve mérite d'être exaucé ✨
-  </p>
-
-  <div class="hline">
-    <span>🌸</span>
+  <div class="notif-panel" id="notifPanel">
+    <h3>&#127873; Notifications Cadeaux</h3>
+    <div id="notifList">
+      <div class="n-empty">Aucune notification...</div>
+    </div>
+    <button class="clear-btn" onclick="markRead()">
+      &#10003; Tout marquer comme lu
+    </button>
   </div>
 
-</header>
+  <header class="fu">
+    <span class="crown">&#128081;</span>
+    <h1>Bienvenue dans ta<br>Wishlist d'Anniversaire !</h1>
+    <p>Chaque rêve mérite d'être exaucé &#10024;</p>
+    <div class="hline"><span>&#127800;</span></div>
+  </header>
 
-<div class="page">
+  <div class="page">
+    <div class="grid">
 
-<div class="grid">
-
-  <div class="widget wide fu" id="w-countdown" style="animation-delay:.1s">
-
-    <div class="wtitle">
-      <span class="wicon">⏳</span>
-      Compte à Rebours
-    </div>
-
-    <div class="cd-label">
-      Jusqu'au 28 Mai 2026 - 22h00
-    </div>
-
-    <div class="cd-row" id="cdRow">
-
-      <div class="cd-block">
-        <span class="cd-num" id="cdD">--</span>
-        <div class="cd-lbl">Jours</div>
+      <div class="widget wide fu" id="w-countdown" style="animation-delay:.1s">
+        <div class="wtitle"><span class="wicon">&#9203;</span>Compte à Rebours</div>
+        <div class="cd-label">Jusqu'au 28 Mai 2026 - 22h00</div>
+        <div class="cd-row" id="cdRow">
+          <div class="cd-block"><span class="cd-num" id="cdD">--</span><div class="cd-lbl">Jours</div></div>
+          <div class="cd-sep">:</div>
+          <div class="cd-block"><span class="cd-num" id="cdH">--</span><div class="cd-lbl">Heures</div></div>
+          <div class="cd-sep">:</div>
+          <div class="cd-block"><span class="cd-num" id="cdM">--</span><div class="cd-lbl">Minutes</div></div>
+          <div class="cd-sep">:</div>
+          <div class="cd-block"><span class="cd-num" id="cdS">--</span><div class="cd-lbl">Secondes</div></div>
+        </div>
+        <div class="done-msg" id="doneMsg">&#127881; C'est l'heure de la révélation ! &#127881;</div>
       </div>
 
-      <div class="cd-sep">:</div>
-
-      <div class="cd-block">
-        <span class="cd-num" id="cdH">--</span>
-        <div class="cd-lbl">Heures</div>
+      <div class="widget wide fu" style="animation-delay:.2s">
+        <div class="wtitle"><span class="wicon">&#127872;</span>Découverte des Cadeaux</div>
+        <div id="revealContent">
+          <div class="locked-box"><span class="lk">&#128274;</span><p>Ce widget se déverrouille le 28 Mai 2026 à 22h00...</p></div>
+        </div>
       </div>
 
-      <div class="cd-sep">:</div>
-
-      <div class="cd-block">
-        <span class="cd-num" id="cdM">--</span>
-        <div class="cd-lbl">Minutes</div>
-      </div>
-
-      <div class="cd-sep">:</div>
-
-      <div class="cd-block">
-        <span class="cd-num" id="cdS">--</span>
-        <div class="cd-lbl">Secondes</div>
+      <div class="widget wide fu" style="animation-delay:.3s">
+        <div class="wtitle"><span class="wicon">&#128140;</span>Messages Cadeaux</div>
+        <div class="msg-list" id="msgList"><div class="no-msg">Les messages de tes proches apparaîtront ici...</div></div>
       </div>
 
     </div>
-
-    <div class="done-msg" id="doneMsg">
-      🎉 C'est l'heure de la révélation ! 🎉
-    </div>
-
   </div>
-
-</div>
-</div>
 
 </div>
 
 <script>
-
-/* LOGIN */
-
+/* ─── LOGIN SYSTEM ─── */
 const MOT_DE_PASSE_VALIDE = "ANNIV2026DEGEMIMA";
 
 function checkPass(){
-
-  const input =
-    document.getElementById('pass-input').value;
-
-  const errMsg =
-    document.getElementById('err-msg');
-
-  const overlay =
-    document.getElementById('login-overlay');
-
-  const content =
-    document.getElementById('main-content');
+  const input = document.getElementById('pass-input').value;
+  const errMsg = document.getElementById('err-msg');
+  const overlay = document.getElementById('login-overlay');
+  const content = document.getElementById('main-content');
 
   if(input === MOT_DE_PASSE_VALIDE){
-
     overlay.style.display = 'none';
-
     content.style.display = 'block';
-
-    sessionStorage.setItem(
-      'authenticated',
-      'true'
-    );
-
-  }else{
-
+    sessionStorage.setItem('authenticated', 'true');
+    // Lancer les étoiles et pétales quand le contenu est visible
+    initStarsAndPetals();
+    // Lancer le compte à rebours et les fetchs
+    updateCD();
+    setInterval(updateCD, 1000);
+    fetchNotifs();
+    setInterval(fetchNotifs, 4000);
+  } else {
     errMsg.style.display = 'block';
-
-    document.getElementById(
-      'pass-input'
-    ).value = '';
+    document.getElementById('pass-input').value = '';
   }
 }
 
-window.addEventListener('load',function(){
-
-  if(
-    sessionStorage.getItem('authenticated')
-    === 'true'
-  ){
-
-    document.getElementById(
-      'login-overlay'
-    ).style.display = 'none';
-
-    document.getElementById(
-      'main-content'
-    ).style.display = 'block';
+window.addEventListener('load', function(){
+  if(sessionStorage.getItem('authenticated') === 'true'){
+    document.getElementById('login-overlay').style.display = 'none';
+    document.getElementById('main-content').style.display = 'block';
+    initStarsAndPetals();
+    updateCD();
+    setInterval(updateCD, 1000);
+    fetchNotifs();
+    setInterval(fetchNotifs, 4000);
   }
 });
 
-/* STARS */
-
-(function(){
-
-  for(var i=0;i<55;i++){
-
-    var s=document.createElement('div');
-
-    s.className='star';
-
-    s.style.cssText=
-      'left:'+Math.random()*100+
-      'vw;top:'+Math.random()*100+
-      'vh;animation-delay:'+Math.random()*6+
-      's;animation-duration:'+
-      (2+Math.random()*4)+'s';
-
+/* ─── STARS & PETALS ─── */
+function initStarsAndPetals(){
+  for(var i=0; i<55; i++){
+    var s = document.createElement('div');
+    s.className = 'star';
+    s.style.cssText = 'left:' + Math.random()*100 + 'vw;top:' + Math.random()*100 + 'vh;animation-delay:' + Math.random()*6 + 's;animation-duration:' + (2+Math.random()*4) + 's';
     document.body.appendChild(s);
   }
-
-  for(var j=0;j<12;j++){
-
-    var p=document.createElement('div');
-
-    p.className='petal';
-
-    var sz=(5+Math.random()*8)+'px';
-
-    p.style.cssText=
-      'left:'+Math.random()*100+
-      'vw;width:'+sz+
-      ';height:'+sz+
-      ';animation-delay:'+Math.random()*12+
-      's;animation-duration:'+
-      (10+Math.random()*14)+'s';
-
+  for(var j=0; j<12; j++){
+    var p = document.createElement('div');
+    p.className = 'petal';
+    var sz = (5+Math.random()*8) + 'px';
+    p.style.cssText = 'left:' + Math.random()*100 + 'vw;width:' + sz + ';height:' + sz + ';animation-delay:' + Math.random()*12 + 's;animation-duration:' + (10+Math.random()*14) + 's';
     document.body.appendChild(p);
   }
+}
 
-})();
+/* ─── COUNTDOWN ─── */
+function pad(n){ return String(n).padStart(2, '0'); }
 
+function tick(id, val){
+  var el = document.getElementById(id);
+  if(!el) return;
+  var v = pad(val);
+  if(el.textContent !== v){
+    el.textContent = v;
+    el.classList.remove('tick');
+    void el.offsetWidth;
+    el.classList.add('tick');
+    setTimeout(function(){ el.classList.remove('tick'); }, 200);
+  }
+}
+
+function updateCD(){
+  fetch('/api/countdown').then(function(r){ return r.json(); }).then(function(d){
+    if(d.done){
+      document.getElementById('cdRow').style.display = 'none';
+      document.getElementById('doneMsg').style.display = 'block';
+      loadReveal();
+    } else {
+      tick('cdD', d.d);
+      tick('cdH', d.h);
+      tick('cdM', d.m);
+      tick('cdS', d.s);
+    }
+  }).catch(function(){});
+}
+
+/* ─── REVEAL ─── */
+function loadReveal(){
+  fetch('/api/reveal').then(function(r){ return r.json(); }).then(function(d){
+    if(d.locked) return;
+    var html = '<div class="reveal-grid">';
+    d.gifts.forEach(function(g, i){
+      html += '<div class="rv-card" style="animation-delay:' + (i*.04) + 's"><span class="rv-emoji">' + g.emoji + '</span><div class="rv-name">' + g.name + '</div><span class="rv-count">' + g.total + ' fois choisi' + (g.total !== 1 ? 's' : '') + '</span></div>';
+    });
+    html += '</div>';
+    document.getElementById('revealContent').innerHTML = html;
+  }).catch(function(){});
+}
+
+/* ─── NOTIFICATIONS & MESSAGES ─── */
+var _notifs = [];
+var panelOpen = false;
+
+function fetchNotifs(){
+  fetch('/api/notifications').then(function(r){ return r.json(); }).then(function(list){
+    _notifs = list;
+    var badge = document.getElementById('badge');
+    if(list.length){ badge.style.display = 'flex'; badge.textContent = list.length; } else { badge.style.display = 'none'; }
+    if(panelOpen) renderPanel();
+  }).catch(function(){});
+
+  fetch('/api/messages').then(function(r){ return r.json(); }).then(function(list){
+    var box = document.getElementById('msgList');
+    if(!list.length){ box.innerHTML = '<div class="no-msg">Les messages de tes proches apparaîtront ici...</div>'; return; }
+    var html = '';
+    list.forEach(function(n){
+      html += '<div class="msg-item"><span class="msg-ico">&#127873;</span><div><div class="msg-text">Un visiteur a choisi <b>' + n.gift_name + '</b> &mdash; <b style="color:#c9a96e">' + n.quantity + ' fois</b></div><div class="msg-date">' + new Date(n.created_at + ' UTC').toLocaleString('fr-FR') + '</div></div></div>';
+    });
+    box.innerHTML = html;
+  }).catch(function(){});
+}
+
+function renderPanel(){
+  var box = document.getElementById('notifList');
+  if(!_notifs.length){ box.innerHTML = '<div class="n-empty">Aucune notification...</div>'; return; }
+  var html = '';
+  _notifs.forEach(function(n){
+    html += '<div class="n-item">Un visiteur a choisi <b>' + n.gift_name + '</b> &mdash; <b>' + n.quantity + ' fois</b><div class="n-time">' + new Date(n.created_at + ' UTC').toLocaleString('fr-FR') + '</div></div>';
+  });
+  box.innerHTML = html;
+}
+
+function togglePanel(){
+  var p = document.getElementById('notifPanel');
+  panelOpen = !panelOpen;
+  p.style.display = panelOpen ? 'block' : 'none';
+  if(panelOpen) renderPanel();
+}
+
+function markRead(){
+  fetch('/api/mark_read', {method:'POST'}).then(function(){
+    _notifs = [];
+    document.getElementById('badge').style.display = 'none';
+    document.getElementById('notifList').innerHTML = '<div class="n-empty">Tout lu &#10003;</div>';
+  }).catch(function(){});
+}
+
+document.addEventListener('click', function(e){
+  var bell = document.getElementById('bellBtn');
+  var panel = document.getElementById('notifPanel');
+  if(!bell.contains(e.target) && !panel.contains(e.target)){
+    document.getElementById('notifPanel').style.display = 'none';
+    panelOpen = false;
+  }
+});
+
+// Fallback: si la page reste blanche après 3s, forcer l'affichage
+setTimeout(function(){
+  var page = document.querySelector('.page');
+  var header = document.querySelector('header');
+  if(page) page.style.opacity = '1';
+  if(header) header.style.opacity = '1';
+  document.body.style.background = '#110810';
+}, 2000);
 </script>
-
 </body>
 </html>
