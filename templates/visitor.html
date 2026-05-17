@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Wishlist - Invites</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{min-height:100vh;background:#0c0918;color:#fdf6f0;font-family:'Lato',sans-serif;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;z-index:0;background:radial-gradient(ellipse 70% 60% at 10% 15%,rgba(124,106,247,.2) 0%,transparent 55%),radial-gradient(ellipse 60% 70% at 90% 85%,rgba(232,164,184,.15) 0%,transparent 55%),linear-gradient(160deg,#0c0918 0%,#13102a 50%,#080810 100%);animation:bgshift 12s ease-in-out infinite alternate}
+@keyframes bgshift{0%{opacity:1}50%{opacity:.85;transform:scale(1.02)}100%{opacity:1;transform:scale(1)}}
+.orb{position:fixed;border-radius:50%;filter:blur(80px);pointer-events:none;z-index:0;animation:orbmove ease-in-out infinite alternate}
+@keyframes orbmove{0%{transform:translate(0,0)}100%{transform:translate(30px,20px)}}
+.star{position:fixed;width:2px;height:2px;background:#fff;border-radius:50%;pointer-events:none;z-index:0;animation:twinkle ease-in-out infinite}
+@keyframes twinkle{0%,100%{opacity:0;transform:scale(.5)}50%{opacity:.7;transform:scale(1.4)}}
+.ptc{position:fixed;border-radius:50%;pointer-events:none;z-index:0;opacity:0;animation:rise linear infinite}
+@keyframes rise{0%{opacity:0;transform:translateY(100vh) scale(0)}10%{opacity:.6}90%{opacity:.2}100%{opacity:0;transform:translateY(-10vh) scale(1)}}
+
+/* loading */
+#loading{position:fixed;inset:0;z-index:900;background:#0c0918;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;transition:opacity .5s}
+.load-ring{width:60px;height:60px;border-radius:50%;border:3px solid rgba(201,169,110,.2);border-top:3px solid #c9a96e;animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.load-txt{font-family:'Playfair Display',serif;color:#c9a96e;font-size:1.1rem;letter-spacing:.1em}
+
+/* login */
+#screen-login{min-height:100vh;display:flex;align-items:center;justify-content:center;position:relative;z-index:1}
+.card{position:relative;z-index:2;background:linear-gradient(150deg,rgba(30,26,60,.95),rgba(19,16,42,.97));border:1px solid rgba(201,169,110,.3);border-radius:30px;padding:52px 44px;width:100%;max-width:440px;margin:16px;box-shadow:0 40px 100px rgba(0,0,0,.6),0 0 80px rgba(124,106,247,.12);animation:cardIn .8s cubic-bezier(.34,1.56,.64,1);backdrop-filter:blur(20px)}
+@keyframes cardIn{from{opacity:0;transform:translateY(40px) scale(.9)}to{opacity:1;transform:none}}
+.card::before{content:'';position:absolute;top:0;left:20%;right:20%;height:1px;background:linear-gradient(to right,transparent,#c9a96e,transparent);animation:shimmer 3s ease-in-out infinite}
+@keyframes shimmer{0%,100%{left:20%;right:20%;opacity:.6}50%{left:5%;right:5%;opacity:1}}
+.card-ico{font-size:3.8rem;display:block;text-align:center;margin-bottom:16px;animation:bounce 3s ease-in-out infinite}
+@keyframes bounce{0%,100%{transform:translateY(0) rotate(-4deg)}50%{transform:translateY(-14px) rotate(4deg)}}
+.card-title{font-family:'Playfair Display',serif;font-size:1.9rem;text-align:center;line-height:1.25;margin-bottom:8px;background:linear-gradient(135deg,#c9a96e 0%,#e8a4b8 60%,#d4a8e0 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.card-sub{font-family:'Playfair Display',serif;font-style:italic;color:rgba(232,164,184,.6);text-align:center;font-size:.95rem;margin-bottom:30px}
+.sep{height:1px;background:linear-gradient(to right,transparent,rgba(201,169,110,.45),transparent);margin:0 0 28px}
+.field{margin-bottom:20px}
+.field label{font-size:.75rem;letter-spacing:.2em;text-transform:uppercase;color:#c9a96e;display:block;margin-bottom:8px}
+.field input{width:100%;background:rgba(255,255,255,.04);border:1px solid rgba(201,169,110,.2);border-radius:13px;padding:14px 17px;color:#fdf6f0;font-family:'Lato',sans-serif;font-size:1rem;outline:none;transition:all .35s}
+.field input::placeholder{color:rgba(255,255,255,.2)}
+.field input:focus{border-color:rgba(232,164,184,.6);background:rgba(232,164,184,.06);box-shadow:0 0 0 4px rgba(232,164,184,.1)}
+.btn-enter{width:100%;margin-top:8px;background:linear-gradient(135deg,#7c6af7 0%,#e8a4b8 55%,#c9a96e 100%);border:none;border-radius:14px;padding:15px;color:#fff;font-family:'Lato',sans-serif;font-weight:700;font-size:1rem;cursor:pointer;transition:all .35s;letter-spacing:.05em;position:relative;overflow:hidden}
+.btn-enter:hover{transform:translateY(-3px);box-shadow:0 14px 36px rgba(124,106,247,.45)}
+.btn-enter:active{transform:translateY(0)}
+.btn-enter:disabled{opacity:.55;pointer-events:none}
+.login-err{color:#ff8fa3;font-size:.82rem;text-align:center;margin-top:13px;display:none;animation:shake .4s ease}
+@keyframes shake{0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-8px)}40%,80%{transform:translateX(8px)}}
+.login-note{text-align:center;margin-top:20px;font-size:.8rem;color:rgba(255,255,255,.25);font-style:italic}
+
+/* gifts */
+#screen-gifts{display:none;position:relative;z-index:1}
+.logout-btn{position:fixed;top:18px;right:20px;z-index:300;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:22px;padding:8px 18px;color:rgba(255,255,255,.4);font-size:.8rem;cursor:pointer;transition:all .3s}
+.logout-btn:hover{background:rgba(232,164,184,.12);border-color:#e8a4b8;color:#e8a4b8;transform:translateY(-1px)}
+.gh{text-align:center;padding:55px 20px 32px;position:relative;z-index:1}
+.gh-ico{font-size:3.2rem;display:block;animation:float 3s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+.gh h1{font-family:'Playfair Display',serif;font-size:clamp(1.8rem,4.5vw,3.2rem);background:linear-gradient(135deg,#c9a96e,#e8a4b8,#7c6af7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin:12px 0 8px;line-height:1.25}
+.gh p{font-family:'Playfair Display',serif;font-style:italic;color:rgba(232,164,184,.65);font-size:1rem}
+.vbadge{display:inline-flex;align-items:center;gap:8px;background:rgba(124,106,247,.14);border:1px solid rgba(124,106,247,.3);border-radius:22px;padding:6px 18px;font-size:.82rem;color:#7c6af7;margin-top:14px}
+.vname{font-weight:700;color:#b8a8ff}
+.gs{max-width:1320px;margin:0 auto;padding:8px 18px 100px}
+.sec-title{font-family:'Playfair Display',serif;color:#c9a96e;font-size:1.4rem;text-align:center;margin-bottom:32px;display:flex;align-items:center;justify-content:center;gap:14px}
+.sec-title::before,.sec-title::after{content:'';flex:0 0 60px;height:1px;background:linear-gradient(to right,transparent,#c9a96e)}
+.sec-title::after{background:linear-gradient(to left,transparent,#c9a96e)}
+.gg{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:20px}
+
+/* gift card */
+.gc{background:linear-gradient(150deg,rgba(28,24,56,.92),rgba(18,15,40,.95));border:1px solid rgba(201,169,110,.15);border-radius:24px;padding:22px 16px 18px;text-align:center;cursor:pointer;transition:all .4s cubic-bezier(.34,1.56,.64,1);position:relative;overflow:hidden;animation:cin .6s cubic-bezier(.34,1.56,.64,1) both}
+.gc::before{content:'';position:absolute;inset:0;border-radius:24px;background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(232,164,184,.1),transparent 70%);opacity:0;transition:opacity .3s}
+.gc:hover{transform:translateY(-9px) scale(1.04);border-color:rgba(232,164,184,.5);box-shadow:0 22px 55px rgba(232,164,184,.2)}
+.gc:hover::before{opacity:1}
+.gc.sel{border-color:#c9a96e;background:linear-gradient(150deg,rgba(55,40,15,.95),rgba(35,25,8,.97));box-shadow:0 0 35px rgba(201,169,110,.25)}
+.gc.sel::after{content:'\2713';position:absolute;top:12px;right:12px;background:linear-gradient(135deg,#c9a96e,#e8c06e);color:#0c0918;border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;font-size:.85rem;font-weight:900;animation:popin .35s cubic-bezier(.34,1.56,.64,1)}
+@keyframes cin{from{opacity:0;transform:translateY(32px) scale(.88)}to{opacity:1;transform:none}}
+@keyframes popin{from{transform:scale(0) rotate(-45deg)}to{transform:scale(1) rotate(0deg)}}
+.gw{width:84px;height:84px;border-radius:50%;background:rgba(255,255,255,.05);border:1.5px solid rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;margin:0 auto 14px;overflow:hidden;transition:all .4s;box-shadow:0 4px 14px rgba(0,0,0,.3)}
+.gc:hover .gw{transform:scale(1.15) rotate(5deg);background:rgba(232,164,184,.12);border-color:rgba(232,164,184,.4)}
+.gc.sel .gw{border-color:#c9a96e}
+.gw img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+.gem{font-size:2.5rem;line-height:1;display:block}
+.gn{font-family:'Playfair Display',serif;font-size:.94rem;color:#fdf6f0;margin-bottom:7px;line-height:1.35;font-weight:600}
+.gd{font-size:.7rem;color:rgba(255,255,255,.36);line-height:1.45;margin-bottom:14px}
+.qr{display:flex;align-items:center;justify-content:center;gap:11px;background:rgba(0,0,0,.3);border-radius:32px;padding:6px 14px;border:1px solid rgba(255,255,255,.07);transition:border-color .3s}
+.gc.sel .qr{border-color:rgba(201,169,110,.3)}
+.qb{background:rgba(255,255,255,.08);border:none;width:28px;height:28px;border-radius:50%;color:#fdf6f0;cursor:pointer;font-size:1.15rem;display:flex;align-items:center;justify-content:center;transition:all .25s}
+.qb:hover{background:#e8a4b8;color:#0c0918;transform:scale(1.2)}
+.qnum{font-family:'Playfair Display',serif;font-size:1.15rem;color:#c9a96e;min-width:20px;text-align:center;transition:color .2s}
+.cfm{display:none;width:100%;margin-top:13px;background:linear-gradient(135deg,#7c6af7,#e8a4b8);border:none;border-radius:12px;color:#fff;font-family:'Lato',sans-serif;font-weight:700;font-size:.84rem;padding:11px;cursor:pointer;transition:all .3s;position:relative;overflow:hidden}
+.gc.sel .cfm{display:block}
+.cfm:hover{transform:scale(1.04);box-shadow:0 7px 22px rgba(124,106,247,.45)}
+.cfm.done{background:linear-gradient(135deg,#1e4d1e,#3d8b3d)}
+
+/* toast */
+#toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(120px);background:linear-gradient(150deg,#182d18,#0e1e0e);border:1px solid rgba(76,175,80,.6);border-radius:20px;padding:18px 30px;text-align:center;z-index:600;min-width:290px;box-shadow:0 20px 55px rgba(0,0,0,.55);transition:transform .55s cubic-bezier(.34,1.56,.64,1),opacity .3s;opacity:0}
+#toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+.tico{font-size:2rem;display:block;margin-bottom:8px}
+.ttitle{font-family:'Playfair Display',serif;font-size:1.1rem;color:#81c784;margin-bottom:5px}
+.tsub{font-size:.8rem;color:rgba(255,255,255,.5)}
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-thumb{background:#c9a96e;border-radius:2px}
+</style>
+</head>
+<body>
+
+<div id="loading">
+  <div class="load-ring"></div>
+  <div class="load-txt">Chargement...</div>
+</div>
+
+<script>
+(function(){
+  var orbData=[
+    {w:'400px',h:'400px',top:'5%',left:'5%',bg:'rgba(124,106,247,.06)',dur:'18s'},
+    {w:'350px',h:'350px',top:'60%',right:'5%',bg:'rgba(232,164,184,.07)',dur:'22s'},
+    {w:'300px',h:'300px',top:'30%',left:'50%',bg:'rgba(201,169,110,.04)',dur:'15s'}
+  ];
+  orbData.forEach(function(o){
+    var el=document.createElement('div');el.className='orb';
+    el.style.width=o.w;el.style.height=o.h;el.style.top=o.top||'auto';
+    el.style.left=o.left||'auto';el.style.right=o.right||'auto';
+    el.style.background=o.bg;el.style.animationDuration=o.dur;
+    document.body.appendChild(el);
+  });
+  for(var i=0;i<<50;i++){
+    var s=document.createElement('div');s.className='star';
+    s.style.left=Math.random()*100+'vw';s.style.top=Math.random()*100+'vh';
+    s.style.animationDelay=Math.random()*7+'s';s.style.animationDuration=(2+Math.random()*4)+'s';
+    document.body.appendChild(s);
+  }
+  var cols=['#e8a4b8','#c9a96e','#7c6af7','#ffffff','#d4a8e0'];
+  for(var j=0;j<<25;j++){
+    var p=document.createElement('div');p.className='ptc';
+    var sz=(2+Math.random()*5)+'px';
+    p.style.width=sz;p.style.height=sz;p.style.left=Math.random()*100+'vw';p.style.bottom='0';
+    p.style.background=cols[Math.floor(Math.random()*5)];
+    p.style.animationDelay=Math.random()*16+'s';p.style.animationDuration=(10+Math.random()*14)+'s';
+    document.body.appendChild(p);
+  }
+})();
+</script>
+
+<!-- LOGIN -->
+<div id="screen-login">
+  <div class="card">
+    <span class="card-ico">&#127874;</span>
+    <div class="card-title">Bienvenue dans la<br>Wishlist de l'Anniversaireuse !</div>
+    <div class="card-sub">Identifie-toi pour choisir un cadeau &#10024;</div>
+    <div class="sep"></div>
+    <div class="field">
+      <label for="nom">Nom</label>
+      <input id="nom" type="text" placeholder="Ton nom de famille" autocomplete="family-name">
+    </div>
+    <div class="field">
+      <label for="prenom">Prenom</label>
+      <input id="prenom" type="text" placeholder="Ton prenom" autocomplete="given-name">
+    </div>
+    <button class="btn-enter" id="btnEnter" onclick="doLogin()">&#10024; Entrer dans la Wishlist</button>
+    <div class="login-err" id="loginErr">Merci de renseigner ton nom et prenom &#128150;</div>
+    <p class="login-note">Tes informations restent confidentielles</p>
+  </div>
+</div>
+
+<!-- GIFTS -->
+<div id="screen-gifts">
+  <button class="logout-btn" onclick="doLogout()">&#8617; Deconnexion</button>
+  <div class="gh">
+    <span class="gh-ico">&#127873;</span>
+    <h1>Bienvenue dans la Wishlist<br>de l'Anniversaireuse !</h1>
+    <p>Choisis le cadeau qui lui ferait plaisir &#10024;</p>
+    <div class="vbadge">&#128100; Connecte(e) &mdash; <span class="vname" id="vname"></span></div>
+  </div>
+  <div class="gs">
+    <div class="sec-title">&#127872; La Wishlist &#127872;</div>
+    <div class="gg" id="grid"></div>
+  </div>
+</div>
+
+<div id="toast">
+  <span class="tico" id="tIco"></span>
+  <div class="ttitle" id="tTitle"></div>
+  <div class="tsub" id="tSub"></div>
+</div>
+
+<script>
+var GIFTS=[
+  {id:1, name:"Bouquet Special",        emoji:"&#128144;", desc:"Fleurs fraiches, makeup, Polaroid, skin care, air care"},
+  {id:2, name:"Parfum Rose d Emotion",  emoji:"&#127801;", desc:"Rose d emotion - Mydoria, grossiste parfum TikTok"},
+  {id:3, name:"Panier Shein",           emoji:"&#128717;", desc:"Validation de ton panier Shein complet"},
+  {id:4, name:"Paire de Chaussures",    emoji:"&#128096;", desc:"Pointure 39 - surprise stylee"},
+  {id:5, name:"Vetements Taille L",     emoji:"&#128087;", desc:"Personnalises ou non, selon tes gouts"},
+  {id:6, name:"Bijoux Dores",           emoji:"&#10024;",  desc:"Personnalises ou non - preference doree"},
+  {id:7, name:"Perruque",               emoji:"&#128135;", desc:"La perruque de tes reves"},
+  {id:8, name:"AirPods Pro",            emoji:"&#127911;", desc:"AirPods Pro 2 ou AirPods Pro 3"},
+  {id:9, name:"iPad",                   emoji:"&#128241;", desc:"L iPad pour ta creativite"},
+  {id:10,name:"Dark Romance",           emoji:"&#128420;", desc:"Livres Dark Romance - collection choisie"},
+  {id:11,name:"Skin et Hair Care",      emoji:"&#129524;", desc:"Produits coreens de preference + hair care"},
+  {id:12,name:"Body Care",              emoji:"&#128705;", desc:"Produits luxueux pour le corps"},
+  {id:13,name:"Coffrets Parfum",        emoji:"&#127873;", desc:"Coffrets de parfum elegants"},
+  {id:14,name:"Maillot du Barca",       emoji:"&#9917;",   desc:"Le maillot officiel FC Barcelona"},
+  {id:15,name:"Kit Makeup Complet",     emoji:"&#128132;", desc:"Kit ou trousse a makeup avec du makeup"},
+];
+var MY={};var Q={};
+
+function init(){
+  fetch('/api/my_selections')
+    .then(function(r){return r.json()})
+    .then(function(data){
+      MY=data;
+      if(Object.keys(data).length>0||sessionStorage.getItem('wl_vid')){
+        showGifts(sessionStorage.getItem('wl_name')||'');
+      }else{showLogin()}
+    })
+    .catch(function(){showLogin()});
+}
+function hideLoading(){
+  var l=document.getElementById('loading');
+  l.style.opacity='0';
+  setTimeout(function(){l.style.display='none'},500);
+}
+function showLogin(){hideLoading();document.getElementById('screen-login').style.display='flex';document.getElementById('screen-gifts').style.display='none'}
+function showGifts(name){
+  hideLoading();
+  document.getElementById('screen-login').style.display='none';
+  document.getElementById('screen-gifts').style.display='block';
+  if(name)document.getElementById('vname').textContent=name;
+  renderGifts();
+}
+document.addEventListener('keypress',function(e){if(e.key==='Enter')doLogin()});
+function doLogin(){
+  var nom=document.getElementById('nom').value.trim();
+  var prenom=document.getElementById('prenom').value.trim();
+  var err=document.getElementById('loginErr');
+  var btn=document.getElementById('btnEnter');
+  if(!nom||!prenom){err.style.display='block';err.style.animation='none';void err.offsetWidth;err.style.animation='shake .4s ease';return}
+  err.style.display='none';btn.textContent='Connexion...';btn.disabled=true;
+  fetch('/api/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({nom:nom,prenom:prenom})})
+    .then(function(r){return r.json()})
+    .then(function(d){
+      if(d.ok){
+        var full=prenom+' '+nom;
+        sessionStorage.setItem('wl_vid','1');sessionStorage.setItem('wl_name',full);
+        fetch('/api/my_selections').then(function(r){return r.json()}).then(function(data){MY=data;showGifts(full)}).catch(function(){showGifts(full)});
+      }else{btn.textContent='Entrer dans la Wishlist';btn.disabled=false;err.style.display='block'}
+    })
+    .catch(function(){btn.textContent='Entrer dans la Wishlist';btn.disabled=false});
+}
+function doLogout(){
+  fetch('/api/logout',{method:'POST'}).finally(function(){
+    sessionStorage.clear();MY={};Q={};
+    document.getElementById('nom').value='';document.getElementById('prenom').value='';
+    document.getElementById('btnEnter').textContent='Entrer dans la Wishlist';document.getElementById('btnEnter').disabled=false;
+    showLogin();
+  });
+}
+function renderGifts(){
+  var grid=document.getElementById('grid');
+  var html='';
+  GIFTS.forEach(function(g,i){
+    var saved=MY[String(g.id)];var qty=saved||1;var isSel=!!saved;
+    html+='<div class="gc'+(isSel?' sel':'')+'" id="c'+g.id+'" style="animation-delay:'+(i*.05)+'s" onclick="toggleCard(event,'+g.id+')">'
+      +'<div class="gw" id="iw'+g.id+'"><span class="gem">'+g.emoji+'</span></div>'
+      +'<div class="gn">'+g.name+'</div>'
+      +'<div class="gd">'+g.desc+'</div>'
+      +'<div class="qr"><button class="qb" onclick="chQty(event,'+g.id+',-1)">&#8722;</button><span class="qnum" id="q'+g.id+'">'+qty+'</span><button class="qb" onclick="chQty(event,'+g.id+',1)">+</button></div>'
+      +'<button class="cfm'+(isSel?' done':'')+'" id="b'+g.id+'" onclick="confirmGift(event,'+g.id+',\''+g.name+'\',\''+g.emoji+'\')">'+(isSel?'&#10003; Deja selectionne':'&#127873; Confirmer ce cadeau')+'</button>'
+      +'</div>';
+  });
+  grid.innerHTML=html;
+  GIFTS.forEach(function(g){
+    fetch('/static/images/'+g.id+'.png',{method:'HEAD'}).then(function(r){
+      if(r.ok){var w=document.getElementById('iw'+g.id);if(w)w.innerHTML='<img src="/static/images/'+g.id+'.png" alt="'+g.name+'" onerror="this.parentNode.innerHTML=\'<<span class=gem>'+g.emoji+'</span>\'">';}
+    }).catch(function(){});
+  });
+}
+function toggleCard(e,id){if(e.target.classList.contains('qb')||e.target.classList.contains('cfm'))return;document.getElementById('c'+id).classList.toggle('sel')}
+function chQty(e,id,d){
+  e.stopPropagation();
+  var el=document.getElementById('q'+id);var v=parseInt(el.textContent)+d;
+  if(v<<1)v=1;if(v>20)v=20;Q[id]=v;el.textContent=v;
+  el.style.color=d>0?'#81c784':'#ff8fa3';setTimeout(function(){el.style.color='#c9a96e'},220);
+}
+function confirmGift(e,id,name,emoji){
+  e.stopPropagation();
+  var btn=document.getElementById('b'+id);var qty=Q[id]||parseInt(document.getElementById('q'+id).textContent)||1;
+  btn.textContent='Envoi...';btn.disabled=true;
+  fetch('/api/select',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({gift_id:id,quantity:qty})})
+    .then(function(r){return r.json()})
+    .then(function(d){
+      if(d.ok){
+        MY[String(id)]=qty;btn.innerHTML='&#10003; Selectionne !';btn.classList.add('done');btn.disabled=false;
+        document.getElementById('c'+id).classList.add('sel');showToast(emoji,name,qty);
+        setTimeout(function(){btn.innerHTML='&#10003; Deja selectionne'},3000);
+      }else{btn.innerHTML='&#127873; Confirmer ce cadeau';btn.disabled=false}
+    })
+    .catch(function(){btn.innerHTML='&#127873; Confirmer ce cadeau';btn.disabled=false});
+}
+function showToast(emoji,name,qty){
+  document.getElementById('tIco').innerHTML=emoji;
+  document.getElementById('tTitle').textContent=name+' a bien ete selectionne'+(qty>1?'s':'');
+  document.getElementById('tSub').textContent=qty+' fois - Merci pour ce beau geste !';
+  var t=document.getElementById('toast');t.classList.add('show');
+  setTimeout(function(){t.classList.remove('show')},5000);
+}
+window.addEventListener('DOMContentLoaded', function(){
+  setTimeout(function(){
+    var l = document.getElementById('loading');
+    if(l && l.style.display !== 'none'){
+      l.style.opacity = '0';
+      setTimeout(function(){l.style.display = 'none';}, 500);
+    }
+  }, 3000);
+  init();
+});
+</script>
+
+</body>
+</html>
